@@ -1,0 +1,29 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "node build.mjs",
+  "outputDirectory": "dist",
+  "framework": null,
+  "redirects": [
+    { "source": "/careers/openings", "destination": "/careers", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/about", "destination": "/about-us.html" },
+    { "source": "/about-us", "destination": "/about-us.html" },
+    { "source": "/leadership", "destination": "/leadership.html" },
+    { "source": "/services", "destination": "/services.html" },
+    { "source": "/insights", "destination": "/insights.html" },
+    { "source": "/blog", "destination": "/blog.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/executive-search", "destination": "/executive-search.html" },
+    { "source": "/leadership-advisory", "destination": "/leadership-advisory.html" },
+    { "source": "/workforce-strategy", "destination": "/workforce-strategy.html" },
+    { "source": "/technology-consulting", "destination": "/technology-consulting.html" },
+    { "source": "/professionals", "destination": "/professionals.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/cookies", "destination": "/cookies.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/recruitment-scam-alert", "destination": "/recruitment-scam-alert.html" },
+    { "source": "/careers", "destination": "/careers.html" },
+    { "source": "/sitemap", "destination": "/sitemap.html" }
+  ]
+}

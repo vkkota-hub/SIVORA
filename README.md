@@ -1,10 +1,12 @@
-# SIVORA website preview
+# SIVORA website
 
-`standalone-preview.html` is a self-contained interactive prototype for the SIVORA website. Its visible pages are generated in the browser and use local storage only for the careers demonstration.
+This repository contains the SIVORA website and a small static-site build for Vercel.
 
-## Preview
+## Build and preview
 
-Open `standalone-preview.html` through a local static web server so the `assets/` and `images/` paths load correctly. The navigation uses browser path routes such as `/services` and `/contact`; the hosting service must be configured to serve this HTML file for those routes.
+Run `node build.mjs` to generate the deployable site in `dist/`. Vercel uses the checked-in `vercel.json` build command, route rewrites and output directory. Set `SITE_URL` in Vercel when the company custom domain is connected; the current default is `https://sivora-livid.vercel.app`.
+
+Open `standalone-preview.html` directly to view the interactive prototype. `index.html` is the production entry and is also the source used to generate the route-specific HTML pages and social metadata.
 
 ## Confirmed company details
 
@@ -12,14 +14,13 @@ Open `standalone-preview.html` through a local static web server so the `assets/
 - Company number: 17466438
 - Registered in England and Wales
 - Registered office: 27 Whinham Green, Aylesbury, England, HP18 0XJ
-- Contact email: Contact@Sivora.org
-- Phone: not displayed, as requested by the client
+- Contact email requested by the client: Contact@Sivora.org
+- Phone number: not displayed, as requested
 
-## Current limitations before launch
+## Items still needing account setup or client confirmation
 
-- The contact form validates the fields and opens an email draft. It does not send the enquiry to a server or guarantee email delivery. Configure and verify the `Contact@Sivora.org` mailbox and an approved form delivery endpoint.
-- Legal pages are short website drafts. Confirm the lawful basis and retention period for enquiries and candidate applications before publishing as final.
-- The X icon is shown without a link until the company page URL is provided.
-- The LinkedIn link uses the company ID Prem shared; confirm that it is the public company page before launch.
-- Page content is rendered client-side. Search engines can execute JavaScript, but server rendering or pre-rendering and host rewrites are needed for reliable crawlable page URLs.
-- The website has not been published. Connect the chosen custom domain and hosting configuration before launch.
+- The contact form opens an email draft. It does not send mail from the website. The Contact@Sivora.org mailbox and an approved delivery service must be set up before server-side form delivery can be enabled.
+- Confirm SIVORA’s retention schedule and data-protection handling for enquiries and candidate applications before treating the privacy page as final.
+- Add the X company-page URL after the client creates the account.
+- Connect the sivora.org domain in Vercel and set `SITE_URL` to `https://sivora.org` after DNS is configured.
+- The careers page has no sample vacancies. Its demo job editor is temporary and does not publish or save positions.
