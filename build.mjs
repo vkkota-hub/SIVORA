@@ -4,8 +4,9 @@ import path from 'node:path';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const output = path.join(root, 'dist');
-const siteUrl = (process.env.SITE_URL || 'https://sivora-livid.vercel.app').replace(/\/$/, '');
+const siteUrl = (process.env.SITE_URL || 'https://sivora.org').replace(/\/$/, '');
 const socialImage = `${siteUrl}/assets/sivora-hero-poster.jpg`;
+const logoImage = `${siteUrl}/images/sivora-brand-transparent.png`;
 const source = await readFile(path.join(root, 'index.html'), 'utf8');
 
 const pages = [
@@ -48,6 +49,8 @@ function prerender(page) {
   html = setMeta(html, 'property', 'og:title', page.title);
   html = setMeta(html, 'property', 'og:description', page.description);
   html = setMeta(html, 'property', 'og:image', socialImage);
+  html = setMeta(html, 'name', 'twitter:image', socialImage);
+  html = html.replace(/<link rel="canonical" href="[^"]*">/, `<link rel="canonical" href="${canonical}">`);
   html = setMeta(html, 'property', 'og:url', canonical);
   html = setMeta(html, 'name', 'twitter:title', page.title);
   html = setMeta(html, 'name', 'twitter:description', page.description);
