@@ -16,7 +16,9 @@ vm.runInContext(clientScript.slice(0, clientScript.lastIndexOf("  document.addEv
 const routeViews = {'/':'home()', '/about-us':'aboutPage()', '/leadership':'leadershipPage()', '/services':'servicesPage()', '/insights':'blogPage()', '/blog':'blogPage()', '/contact':'contact()', '/professionals':'professionalsPage()', '/careers':'careers()', '/sitemap':'sitemapPage()'};
 function pageContent(page){
   const expression = routeViews[page.path] || (['/privacy','/cookies','/terms','/recruitment-scam-alert'].includes(page.path) ? `policyPage(${JSON.stringify(page.path.slice(1))})` : `serviceDetailPage(${JSON.stringify(page.path.slice(1))})`);
-  return vm.runInContext(expression, views);
+  let content = vm.runInContext(expression, views);
+  if (page.path === '/leadership') content = content.replace('<section class="page-section leadership-approach">', '<section class="page-section leadership-profile"><div class="wrap"><div class="eyebrow">Founder &amp; CEO</div><div class="profile-grid"><div><h2>Prem Kumar Tammineni, MBA</h2><p class="profile-role">Founder &amp; CEO, SIVORA LIMITED</p></div><div class="profile-copy"><p>Prem Kumar Tammineni is the Founder and CEO of SIVORA LIMITED, bringing extensive international experience across talent acquisition, executive search, workforce planning, talent strategy and HR transformation.</p><p>Over his career, Prem has partnered with senior business, HR and functional leaders across technology, fintech, banking, SaaS and enterprise services, supporting organisations through growth, transformation and changing workforce requirements.</p><p>His career includes leadership and specialist roles with NCR Atleos, HSBC, Barclays, DXC Technology, FIS, NTT DATA, Monitise, Oracle and Wipro. Working across international markets, he has supported complex organisations with executive and leadership hiring, workforce strategy and transformation.</p></div></div></div></section><section class="page-section leadership-approach">');
+  return content.replace(/<span>Registered office: 27 Whinham Green, Aylesbury, Buckinghamshire, HP18 0XJ<\/span>/g, '');
 }
 
 
@@ -68,6 +70,7 @@ function prerender(page) {
   html = setMeta(html, 'name', 'twitter:description', page.description);
   html = setMeta(html, 'name', 'twitter:image', socialImage);
   html = html.replace(/<link rel="canonical" href="[^"]*">/, `<link rel="canonical" href="${canonical}">`);
+  html = html.replace(/<span>Registered office: 27 Whinham Green, Aylesbury, Buckinghamshire, HP18 0XJ<\/span>/g, '');
   return html;
 }
 
