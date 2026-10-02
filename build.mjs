@@ -71,6 +71,7 @@ function prerender(page) {
   html = setMeta(html, 'name', 'twitter:image', socialImage);
   html = html.replace(/<link rel="canonical" href="[^"]*">/, `<link rel="canonical" href="${canonical}">`);
   html = html.replace(/<span>Registered office: 27 Whinham Green, Aylesbury, Buckinghamshire, HP18 0XJ<\/span>/g, '');
+  html = html.replaceAll('© 2026 SIVORA LIMITED', '© 2026 SIVORA.ORG LIMITED');
   return html;
 }
 
