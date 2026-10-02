@@ -1,7 +1,7 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import nodemailer from 'nodemailer';
 
-const recipient = 'Contact@Sivora.org';
+const recipient = 'prem.kumar@sivora.org';
 const topics = new Set([
   'Executive Search',
   'Leadership Advisory',
@@ -157,6 +157,6 @@ export default async function handler(req, res) {
     return reply(res, 200, { sent: true });
   } catch (error) {
     console.error('SIVORA contact email delivery failed:', error?.code || error?.name || 'unknown error');
-    return reply(res, 502, { error: 'We could not send your enquiry just now. Please email Contact@Sivora.org.' });
+    return reply(res, 502, { error: 'We could not send your enquiry just now. Please email prem.kumar@sivora.org.' });
   }
 }
