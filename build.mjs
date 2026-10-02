@@ -1,6 +1,7 @@
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import vm from 'node:vm';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const output = path.join(root, 'dist');
@@ -8,6 +9,16 @@ const siteUrl = (process.env.SITE_URL || 'https://sivora.org').replace(/\/$/, ''
 const socialImage = `${siteUrl}/assets/sivora-hero-poster.jpg`;
 const logoImage = `${siteUrl}/images/sivora-brand-transparent.png`;
 const source = await readFile(path.join(root, 'index.html'), 'utf8');
+// Reuse the site's content functions at build time so every page has full HTML.
+const views = vm.createContext({location:{pathname:'/',hash:''},window:{addEventListener(){}}});
+const clientScript = source.match(/<script>([\s\S]*?)<\/script>/)[1];
+vm.runInContext(clientScript.slice(0, clientScript.lastIndexOf("  document.addEventListener('click'")), views);
+const routeViews = {'/':'home()', '/about-us':'aboutPage()', '/leadership':'leadershipPage()', '/services':'servicesPage()', '/insights':'blogPage()', '/blog':'blogPage()', '/contact':'contact()', '/professionals':'professionalsPage()', '/careers':'careers()', '/sitemap':'sitemapPage()'};
+function pageContent(page){
+  const expression = routeViews[page.path] || (['/privacy','/cookies','/terms','/recruitment-scam-alert'].includes(page.path) ? `policyPage(${JSON.stringify(page.path.slice(1))})` : `serviceDetailPage(${JSON.stringify(page.path.slice(1))})`);
+  return vm.runInContext(expression, views);
+}
+
 
 const pages = [
   { path: '/', file: 'index.html', title: 'SIVORA | Leadership. Talent. Technology.', description: 'Independent leadership, talent and technology advice from SIVORA LIMITED.', eyebrow: 'Leadership · Talent · Technology', heading: 'Make complex change clear.', copy: 'SIVORA LIMITED provides independent advice on leadership, talent, workforce capability and technology. Explore our services, learn about the team or contact us to discuss your organisation’s needs.', links: [['Explore our services', '/services'], ['Contact SIVORA', '/contact']] },
@@ -16,7 +27,7 @@ const pages = [
   { path: '/services', file: 'services.html', title: 'Services | SIVORA', description: 'Executive search, leadership advisory, workforce and talent strategy, and technology consulting from SIVORA.', eyebrow: 'SIVORA / Services', heading: 'Build the capability to move forward.', copy: 'SIVORA works across Executive Search, Leadership Advisory, Workforce & Talent Strategy, and Technology Consulting.', links: [['Executive Search', '/executive-search'], ['Leadership Advisory', '/leadership-advisory'], ['Workforce & Talent Strategy', '/workforce-strategy'], ['Technology Consulting', '/technology-consulting']] },
   { path: '/insights', file: 'insights.html', title: 'Research & Insights | SIVORA', description: 'Perspectives from SIVORA on leadership, workforce capability, talent and technology change.', eyebrow: 'SIVORA / Insights', heading: 'Ideas for decisions that matter.', copy: 'Read SIVORA perspectives on leadership, workforce strategy, executive search and technology change.', links: [['Explore services', '/services'], ['Contact SIVORA', '/contact']] },
   { path: '/blog', file: 'blog.html', title: 'Research & Insights | SIVORA', description: 'Perspectives from SIVORA on leadership, workforce capability, talent and technology change.', eyebrow: 'SIVORA / Insights', heading: 'Ideas for decisions that matter.', copy: 'Read SIVORA perspectives on leadership, workforce strategy, executive search and technology change.', links: [['Explore services', '/services'], ['Contact SIVORA', '/contact']] },
-  { path: '/contact', file: 'contact.html', title: 'Contact SIVORA | Leadership, talent and technology', description: 'Contact SIVORA LIMITED about leadership, talent, workforce strategy and technology consulting.', eyebrow: 'SIVORA / Contact', heading: 'Start a conversation.', copy: 'Contact SIVORA about leadership, talent, workforce capability or technology. The website form opens an email draft addressed to Contact@Sivora.org.', links: [['Email Contact@Sivora.org', 'mailto:Contact@Sivora.org']] },
+  { path: '/contact', file: 'contact.html', title: 'Contact SIVORA | Leadership, talent and technology', description: 'Contact SIVORA LIMITED about leadership, talent, workforce strategy and technology consulting.', eyebrow: 'SIVORA / Contact', heading: 'Start a conversation.', copy: 'Contact SIVORA about leadership, talent, workforce capability or technology. Use the website form to send an enquiry to Contact@Sivora.org.', links: [['Email Contact@Sivora.org', 'mailto:Contact@Sivora.org']] },
   { path: '/executive-search', file: 'executive-search.html', title: 'Executive Search | SIVORA', description: 'SIVORA executive search identifies and engages leaders for roles where the right appointment matters.', eyebrow: 'SIVORA / Services', heading: 'Executive Search', copy: 'Identify and engage leaders with the experience and judgement to make a meaningful difference to performance, transformation and growth.', links: [['All services', '/services'], ['Contact SIVORA', '/contact']] },
   { path: '/leadership-advisory', file: 'leadership-advisory.html', title: 'Leadership Advisory | SIVORA', description: 'Practical leadership advisory for career progression, executive transitions and leadership development.', eyebrow: 'SIVORA / Services', heading: 'Leadership Advisory', copy: 'Support leaders and organisations through career progression, executive transitions, leadership development and change.', links: [['All services', '/services'], ['Contact SIVORA', '/contact']] },
   { path: '/workforce-strategy', file: 'workforce-strategy.html', title: 'Workforce & Talent Strategy | SIVORA', description: 'Connect business priorities to future workforce demand, skills, talent and organisational capability.', eyebrow: 'SIVORA / Services', heading: 'Workforce & Talent Strategy', copy: 'Understand future demand, assess capability and shape workforce choices that support organisational priorities.', links: [['All services', '/services'], ['Contact SIVORA', '/contact']] },
@@ -41,8 +52,9 @@ function setMeta(html, attribute, name, value) {
 function prerender(page) {
   const canonical = `${siteUrl}${page.path === '/' ? '/' : page.path}`;
   const links = page.links.map(([label, href]) => `<a class="button" href="${escapeHtml(href)}">${escapeHtml(label)}</a>`).join(' ');
-  const main = `<main id="main"><section class="page-intro"><div class="wrap"><div class="eyebrow">${escapeHtml(page.eyebrow)}</div><div class="page-intro-grid"><h1>${escapeHtml(page.heading)}</h1><p>${escapeHtml(page.copy)}</p></div><p class="seo-route-links">${links}</p></div></section></main>`;
-  let html = source.replace(/<main id="main">[\s\S]*?<\/main>/, main);
+  const main = `<main id="main" tabindex="-1">${pageContent(page)}</main>`;
+  let html = source.replace(/<main id="main"[^>]*>[\s\S]*?<\/main>/, main);
+  html = html.replace('<body>', page.path === '/' ? '<body class="home-mode">' : '<body>');
   html = html.replace('<head>', '<head>\n  <base href="/">');
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(page.title)}</title>`);
   html = setMeta(html, 'name', 'description', page.description);
