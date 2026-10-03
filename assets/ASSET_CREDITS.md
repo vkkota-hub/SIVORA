@@ -18,3 +18,7 @@ SIVORA logo files are existing project assets. Their ownership or permission mus
 ## Client-supplied homepage video
 
 `sivora-original-homepage.mp4` was supplied by the client on 3 October 2026 as their SIVORA video generated in ChatGPT. Original filename: `SIVORA_homepage_video_creation_1080p_20261003142512.mp4`. It replaces the stock homepage video. The original generated still remains as the loading poster and social preview.
+
+## Client-supplied generated page images
+
+On 3 October 2026, the client supplied generated SIVORA images in `images/`. Six selected images were copied into `assets/` using descriptive filenames for About, Leadership, Leadership Advisory (also Executive Search), Professionals, Workforce Strategy and Technology Consulting. These show imagined business scenes, not actual SIVORA staff or premises. The two workforce source images are near duplicates; one was selected. These photographs replace the four SVG illustrations in page content.
