@@ -10,3 +10,11 @@ The following images have no recorded source or licence and are no longer refere
 
 ## Brand assets
 SIVORA logo files are existing project assets. Their ownership or permission must be confirmed by the client.
+
+## Original AI-generated homepage image
+
+`sivora-original-hero.png` and its optimised JPEG version were generated for SIVORA using the built-in OpenAI image generation tool on 3 October 2026. They now replace the Pexels video on the homepage and the stock social preview image. This is an imagined architectural scene, not a photograph of SIVORA offices.
+
+## Client-supplied homepage video
+
+`sivora-original-homepage.mp4` was supplied by the client on 3 October 2026 as their SIVORA video generated in ChatGPT. Original filename: `SIVORA_homepage_video_creation_1080p_20261003142512.mp4`. It replaces the stock homepage video. The original generated still remains as the loading poster and social preview.

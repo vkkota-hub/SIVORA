@@ -6,7 +6,7 @@ import vm from 'node:vm';
 const root = path.dirname(fileURLToPath(import.meta.url));
 const output = path.join(root, 'dist');
 const siteUrl = (process.env.SITE_URL || 'https://sivora.org').replace(/\/$/, '');
-const socialImage = `${siteUrl}/assets/sivora-hero-poster.jpg`;
+const socialImage = `${siteUrl}/assets/sivora-original-hero.jpg`;
 const logoImage = `${siteUrl}/images/sivora-brand-transparent.png`;
 const source = await readFile(path.join(root, 'index.html'), 'utf8');
 // Reuse the site's content functions at build time so every page has full HTML.
